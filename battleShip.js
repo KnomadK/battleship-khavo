@@ -117,6 +117,7 @@ var model = {
         return false
     }
 }
+
 // CONTROLLER
 var controller = {
     guesses: 0,
@@ -124,13 +125,19 @@ var controller = {
     processGuess: function (guess) {
         var location = parseGuess(guess)
         if (location) {
-            this.guesses++;
-            var hit = model.fire(location)
-            if (hit && model.shipSunk === model.numShips) {
-                alert("You sank my battleship, in " + this.guesses + " guesses")
-            }
+            this.processClick(location)
+        }
+    },
+
+    processClick: function (locationId) {
+        this.guesses++;
+        var hit = model.fire(locationId)
+        if (hit && model.shipSunk === model.numShips) {
+            alert("You sank my battleship, in " + this.guesses + " guesses")
+            location.reload()
         }
     }
+
 }
 
 // HELPER FUNCTION 
@@ -155,14 +162,24 @@ function parseGuess(guess) {
     return null
 }
 
+
 //Event Handler Function 
 
 function init() {
+
     var fireButton = document.getElementById("fireButton")
     fireButton.onclick = handleFireButton
     var guessInput = document.getElementById("guessInput")
     guessInput.onkeydown = handleKeyPress
-
+    var cellId
+    var cell
+    for (var i = 0; i < 7; i++) {
+        for (var j = 0; j < 7; j++) {
+            cellId = "" + i + j
+            cell = document.getElementById(cellId)
+            cell.onclick = handleFireClick
+        }
+    }
     model.generateShipLocations()
 }
 
@@ -181,7 +198,20 @@ function handleKeyPress(e) {
     }
 }
 
+function handleFireClick(e) {
+    var fireClick = e.target
+    if (fireClick !== null) {
+        cellId = fireClick.id
+        console.log(cellId)
+        controller.processClick(cellId)
+    }
+}
+
+view.displayMessage("Welcome to Battleship game! Type input or click on any square to start the game.")
+
 window.onload = init
+
+
 
 
 
