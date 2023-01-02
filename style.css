@@ -28,6 +28,9 @@ td {
     width: 94px;
     height: 94px;
 }
+td:hover { 
+    background-color: rgb(83, 175, 19, 0.2);
+}
 form { 
     position: absolute; 
     bottom: 0; 
